@@ -1,7 +1,10 @@
 name: Mobilecoin Checkout
 description: Check out and set the git safe dir to include the github workspace
 
-inputs: {}
+inputs:
+  safe:
+    description: Git "safe-directory" - use github.workspace
+    required: true
 
 outputs: {}
 
@@ -15,4 +18,4 @@ runs:
   - name: Set Git Safe Directory
     shell: bash
     run: |
-      git config --global --add safe.directory "${{ github.workspace }}"
+      git config --global --add safe.directory "${{ inputs.safe }}"
