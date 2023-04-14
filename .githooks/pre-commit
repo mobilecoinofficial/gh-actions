@@ -94,28 +94,28 @@ fi
 # fi
 
 # Run hadolint on Dockerfiles included in .internal-ci/docker
-# if which hadolint >/dev/null 2>&1
-# then
-#     echo -e -n "${header} Run hadolint on Dockerfiles in .internal-ci/docker "
+if which hadolint >/dev/null 2>&1
+then
+    echo -e -n "${header} Run hadolint on Dockerfiles in .internal-ci/docker "
 
-#     out=""
+    out=""
 
-#     # Find Dockerfile files
-#     docker_base=".internal-ci/docker"
-#     docker_files=$(find "${docker_base}" -name "Dockerfile*" -type f | grep -v "dockerignore")
+    # Find Dockerfile files
+    docker_base=".internal-ci/docker"
+    docker_files=$(find "${docker_base}" -name "Dockerfile*" -type f | grep -v "dockerignore")
 
-#     # helm lint on directories where there are chart.yaml files
-#     for f in ${docker_files}
-#     do
-#         if ! out+=$(hadolint "${f}" 2>&1)
-#         then
-#             error="true"
-#         fi
-#     done
+    # helm lint on directories where there are chart.yaml files
+    for f in ${docker_files}
+    do
+        if ! out+=$(hadolint "${f}" 2>&1)
+        then
+            error="true"
+        fi
+    done
 
-#     # check for error status and print results
-#     check_results
-# fi
+    # check for error status and print results
+    check_results
+fi
 
 # Run flake8 linting
 # if which flake8 >/dev/null 2>&1
