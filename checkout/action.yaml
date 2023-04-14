@@ -13,5 +13,6 @@ runs:
     with:
       submodules: recursive
   - name: Set Git Safe Directory
+    shell: bash
     run: |
       git config --global --add safe.directory "${{ github.workspace }}"
