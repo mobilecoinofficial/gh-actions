@@ -18,4 +18,6 @@ runs:
   - name: Set Git Safe Directory
     shell: bash
     run: |
+      id
       git config --global --add safe.directory "${{ inputs.safe }}"
+      git config --global -l --show-origin
