@@ -96,7 +96,7 @@ fi
 # Run hadolint on Dockerfiles included in .internal-ci/docker
 if which hadolint >/dev/null 2>&1
 then
-    echo -e -n "${header} Run hadolint on Dockerfiles in .internal-ci/docker "
+    echo -e -n "${header} Run hadolint on Dockerfiles"
 
     out=""
 
