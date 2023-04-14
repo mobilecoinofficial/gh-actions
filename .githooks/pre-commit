@@ -101,7 +101,7 @@ then
     out=""
 
     # Find Dockerfile files
-    docker_base=".internal-ci/docker"
+    docker_base="."
     docker_files=$(find "${docker_base}" -name "Dockerfile*" -type f | grep -v "dockerignore")
 
     # helm lint on directories where there are chart.yaml files
