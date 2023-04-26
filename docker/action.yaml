@@ -1,0 +1,69 @@
+name: Mobilecoin Docker
+description: Standardized docker build and publish actions
+
+inputs:
+  build_args:
+    description: New line separated list of ARG=VALUE
+    required: false
+    default: ""
+  context:
+    description: docker build context path
+    required: false
+    default: .
+  dockerfile:
+    description: Path to dockerfile
+    required: false
+    default: .
+  flavor:
+    description: New line separated list of docker meta flavor options
+    required: false
+    default: |
+      latest=true
+  images:
+    description: URL/Path to docker image registry
+    required: true
+  push:
+    description: Publish container to docker registry?
+    default: true
+    required: false
+  tags:
+    description: New line separated list of tags for the docker image
+    required: true
+
+outputs:
+  tags:
+    description: docker/meta-action tags
+    value: ${{ steps.docker_meta.tags }}
+  pushed:
+    description: was the docker image published to the registry
+    value: ${{ inputs.push }}
+
+runs:
+  using: composite
+  steps:
+  - name: Generate Docker Tags
+      id: docker_meta
+      uses: docker/metadata-action@v4
+      with:
+        flavor: ${{ inputs.flavor }}
+        images: ${{ inputs.images }}
+        tags: ${{ inputs.tags }}
+
+  - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+  - name: Login to DockerHub
+    uses: docker/login-action@v2
+    with:
+      username: ${{ secrets.DOCKERHUB_USERNAME }}
+      password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+  - name: Publish to DockerHub
+      uses: docker/build-push-action@v4
+      with:
+        build-args: ${{ inputs.build_args }}
+        context: ${{ inputs.context }}
+        file: ${{ inputs.dockerfile }}
+        labels: ${{ steps.docker_meta.outputs.labels }}
+        push: ${{ inputs.push }}
+        tags: ${{ steps.docker_meta.outputs.tags }}
