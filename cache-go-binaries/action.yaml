@@ -9,7 +9,7 @@ inputs:
     description: "path to mount cache"
     required: false
     default: |
-      go_build_artifacts
+      cache
   additional_keys:
     description: "additional values to add to the cache key"
     required: false
