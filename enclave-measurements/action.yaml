@@ -1,0 +1,33 @@
+name: Mobilecoin Enclave Measurements
+description: Output the the MRSIGNER/MRENCLAVE Hex values. Requires using the mobilecoin/rust-sgx-base image you built with.
+
+inputs:
+  enclave_so_path:
+    description: path to the enclave singed.so file
+
+outputs:
+  mrsigner:
+    value: ""
+    description: Hex value of MRSIGNER measurement
+  mrenclave:
+    value: ""
+    description: Hex value of MRENCLAVE measurement
+
+runs:
+  using: composite
+  steps:
+  - name: Get MRSIGNER
+    shell: bash
+    run: |
+      mrsigner=$(sgx_sign dump -enclave "${{ inputs.enclave_so_path }}" -dumpfile /dev/stdout 2>&1 | grep -A 2 -m 1 "mrsigner->value" | grep -v "mrsigner->value" | sed -r 's/(0x|\s+)//g' | tr -d "\n")
+
+      echo "${mrsigner}"
+      echo "mrsigner=${mrsigner}" >> ${GITHUB_OUTPUT}
+
+  - name: Get MRENCLAVE
+    shell: bash
+    run: |
+      mrenclave=$(sgx_sign dump -enclave "${{ inputs.enclave_so_path }}" -dumpfile /dev/stdout | grep -A 2 -m 1 "enclave_hash.m" | grep -v "enclave_hash.m" | grep 0x | sed -r 's/(0x|\s+)//g' | tr -d "\n")
+
+      echo "${mrenclave}"
+      echo "mrenclave=${mrenclave}" >> ${GITHUB_OUTPUT}
