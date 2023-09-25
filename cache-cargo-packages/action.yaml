@@ -25,16 +25,6 @@ outputs:
 runs:
   using: composite
   steps:
-  - name: Create cache directories
-    shell: bash
-    run: |
-      read -r -d '' DIRS << EOF
-      ${{ inputs.path }}
-      EOF
-      for d in ${DIRS}
-      do
-          mkdir -p "${d}"
-      done
   - name: Cache rust build binaries
     id: rust_artifact_cache
     uses: actions/cache@v3
