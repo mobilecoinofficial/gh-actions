@@ -13,7 +13,7 @@ runs:
   using: composite
   steps:
   - name: Install git if required
-    uses: mobilecoinofficial/gh-actions/install-git@dba9380a9dbf47d0d6a0e95c2f7b5ffb21d08d56
+    uses: mobilecoinofficial/gh-actions/install-git@3c1ff0739e0ce5f3382634e21ca48188a65c240c
 
   - name: Checkout
     uses: actions/checkout@v4
