@@ -24,7 +24,7 @@ runs:
   using: composite
   steps:
   - name: Install zstd if needed
-    uses: mobilecoinofficial/gh-actions/install-zstd@82b39fb68f6657211b4969559dc7f408a4174afc
+    uses: mobilecoinofficial/gh-actions/install-zstd@v0
 
   - name: Cache rust build binaries
     id: rust_artifact_cache
