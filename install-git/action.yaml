@@ -1,0 +1,34 @@
+name: Install git
+description: Install git for actions/checkout support
+
+runs:
+  using: composite
+  steps:
+  - name: Install git if needed
+    shell: bash
+    run: |
+      if ! command -v git
+      then
+          echo "git not found, attempting to install"
+
+          sudo=$(command -v sudo || true)
+          apt_get=$(command -v apt-get || true)
+          yum=$(command -v yum || true)
+          apk=$(command -v apk || true)
+
+          if [[ -n "${apt-get}" ]]
+          then
+              echo "Found apt-get attempting to update and install"
+              ${sudo} ${apt-get} -y update
+              ${sudo} ${apt-get} install -y --no-recommends git
+          elfi [[ -n "${yum}" ]]
+              echo "Found yum attempting to update and install"
+              ${sudo} ${yum} update -y
+              ${sudo} ${yum} install -y git
+          elfi [[ -n "apk" ]]
+              echo "Found apk attempting to install"
+              ${sudo} ${apk} add --no-cache git
+          else
+              echo "no supported package manager found (apt-get, yum, apk)"
+          fi
+      fi
