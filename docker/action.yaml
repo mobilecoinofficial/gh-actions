@@ -24,7 +24,7 @@ inputs:
     required: true
   push:
     description: Publish container to docker registry?
-    default: true
+    default: "true"
     required: false
   tags:
     description: New line separated list of tags for the docker image

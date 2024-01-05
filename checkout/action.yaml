@@ -1,7 +1,11 @@
 name: Mobilecoin Checkout
 description: Check out and set the git safe dir to include the github workspace
 
-inputs: {}
+inputs:
+  token:
+    description: GitHub actions token
+    required: false
+    default: ${{ github.token }}
 
 outputs: {}
 
@@ -12,6 +16,8 @@ runs:
     uses: actions/checkout@v4
     with:
       submodules: recursive
+      token: ${{ inputs.token }}
+
   - name: Set Git Safe Directory
     shell: bash
     run: |
