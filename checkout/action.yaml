@@ -12,6 +12,9 @@ outputs: {}
 runs:
   using: composite
   steps:
+  # - name: Install git if required
+  #   uses: mobilecoinofficial/gh-actions/install-git@
+
   - name: Checkout
     uses: actions/checkout@v4
     with:
