@@ -6,6 +6,22 @@ inputs:
     description: GitHub actions token
     required: false
     default: ${{ github.token }}
+  path:
+    description: Path under workspace to clone repo to.
+    required: false
+    default: ''
+  repository:
+    description: Repository name with owner if not current.
+    required: false
+    default: ${{ github.repository }}
+  ref:
+    description: The branch, tag or SHA to checkout, if not current.
+    required: false
+    default: ''
+  submodules:
+    description: true. false or recursive
+    required: false
+    default: 'true'
 
 outputs: {}
 
@@ -18,11 +34,9 @@ runs:
   - name: Checkout
     uses: actions/checkout@v4
     with:
-      submodules: recursive
+      submodules: ${{ inputs.submodules }}
       token: ${{ inputs.token }}
-
-  - name: Set Git Safe Directory
-    shell: bash
-    run: |
-      git config --global --add safe.directory "$(pwd)"
-      git config --global -l --show-origin
+      path: ${{ inputs.path }}
+      ref: ${{ inputs.ref }}
+      repository: ${{ inputs.repository }}
+      set-safe-directory: true
