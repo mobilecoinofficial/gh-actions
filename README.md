@@ -62,3 +62,24 @@ Example
       type=sha
     dockerfile: .internal-ci/docker/Dockerfile.${{ env.REPO }}
 ```
+
+### build-downstream-rust-repo
+
+Note: this action needs `pull-requests:write` permissions to add comments to the PR.
+
+Example
+
+```
+jobs:
+  android-bindings:
+    runs-on: mcf-dev-large-x64
+    container: mobilecoin/builder-install:v0.0.32
+    permissions:
+      pull-requests: write
+    steps:
+    - name: Check that android-bindings still builds
+      uses: mobilecoinofficial/gh-actions/build-downstream-rust-repo@v0
+      with:
+        remote_repo: mobilecoinofficial/android-bindings
+        submodule_path: mobilecoin
+```
