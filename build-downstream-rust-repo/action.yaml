@@ -1,0 +1,76 @@
+name: Build downstream cargo repo
+description: Build a cargo project that submodules the current repo. Requires pull-request:write permission for PR comments.
+
+inputs:
+    remote_repo:
+      description: The org/repository of the repository to check
+      required: true
+    submodule_path:
+      description: The path in the remote repo of the submodule we are going to try and up-rev
+      required: true
+    build_cmd:
+      description: The command to build the remote repo
+      required: false
+      default: cargo build --release
+    report_success:
+      description: Comment on PR when build is successful.
+      required: false
+      default: 'false'
+
+runs:
+  using: composite
+  steps:
+  - uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      repository: ${{ inputs.remote_repo }}
+
+  - name: Build downstream repo with current branch
+    shell: bash
+    env:
+      SUBMODULE_PATH: ${{ inputs.submodule_path }}
+      BUILD_CMD: ${{ inputs.build_cmd }}
+    run: |
+      set -e
+      set -o pipefail
+
+      # Change to submodule path under remote repo
+      pushd "${SUBMODULE_PATH}"
+
+      # Emulate checkout module and update submodule to current git ref
+      git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin "+${GITHUB_SHA}:${GITHUB_REF}"
+      git checkout "${GITHUB_REF}"
+
+      # Back out to remote repo base
+      popd
+
+      # Run build command - catch status. We only want to warn in the PR, not block.
+      if ${BUILD_CMD}
+      then
+        echo "BUILD_SUCCESS=yes" >> "${GITHUB_ENV}"
+      else
+        echo "BUILD_SUCCESS=no" >> "${GITHUB_ENV}"
+      fi
+
+  - name: Warn in PR if build fails
+    if: env.BUILD_SUCCESS == 'no'
+    uses: actions/github-script@v7
+    with:
+      script: |
+        github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: '⚠️ Downstream repo ${{ inputs.remote_repo }} failed to build. Check actions status for details.'
+        })
+
+  - name: Success in PR if build is good
+    if: env.BUILD_SUCCESS == 'yes' && inputs.report_success == 'true'
+    uses: actions/github-script@v7
+    with:
+      script: |
+        github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: '✅ Downstream repo ${{ inputs.remote_repo }} built successfully.'
+        })
