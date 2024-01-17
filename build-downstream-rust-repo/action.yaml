@@ -12,6 +12,10 @@ inputs:
       description: The command to build the remote repo
       required: false
       default: cargo build --release
+    report_success:
+      description: Comment on PR when build is successful.
+      required: false
+      default: 'false'
 
 runs:
   using: composite
@@ -39,11 +43,16 @@ runs:
       # Back out to remote repo base
       popd
 
-      # Run build command
-      ${BUILD_CMD}
+      # Run build command - catch status. We only want to warn in the PR, not block.
+      if ${BUILD_CMD}
+      then
+        echo "BUILD_SUCCESS=yes" >> "${GITHUB_ENV}"
+      else
+        echo "BUILD_SUCCESS=no" >> "${GITHUB_ENV}"
+      fi
 
   - name: Warn in PR if build fails
-    if: failure()
+    if: env.BUILD_SUCCESS == 'no'
     uses: actions/github-script@v7
     with:
       script: |
@@ -54,3 +63,14 @@ runs:
           body: '⚠️ Downstream repo ${{ inputs.remote_repo }} failed to build. Check actions status for details.'
         })
 
+  - name: Success in PR if build is good
+    if: env.BUILD_SUCCESS == 'yes' && inputs.report_success == 'true'
+    uses: actions/github-script@v7
+    with:
+      script: |
+        github.rest.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: '✅ Downstream repo ${{ inputs.remote_repo }} built successfully.'
+        })
