@@ -33,8 +33,9 @@ runs:
       # Change to submodule path under remote repo
       pushd "${SUBMODULE_PATH}"
 
-      # Update submodule to current git ref
-      git checkout "${GITHUB_SHA}"
+      # Emulate checkout module and update submodule to current git ref
+      git -c protocol.version=2 fetch --no-tags --prune --no-recurse-submodules --depth=1 origin "+${GITHUB_SHA}:${GITHUB_REF}"
+      git checkout "${GITHUB_REF}"
 
       # Back out to remote repo base
       popd
