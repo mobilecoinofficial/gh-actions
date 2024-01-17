@@ -34,7 +34,7 @@ runs:
       pushd "${SUBMODULE_PATH}"
 
       # Update submodule to current git ref
-      git checkout "${GITHUB_REF}"
+      git checkout "${GITHUB_SHA}"
 
       # Back out to remote repo base
       popd
