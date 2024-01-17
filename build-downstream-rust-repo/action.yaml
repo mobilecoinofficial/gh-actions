@@ -1,6 +1,5 @@
 name: Build downstream cargo repo
-description: Build a cargo project that submodules the current repo
-
+description: Build a cargo project that submodules the current repo. Requires pull-request:write permission for PR comments.
 
 inputs:
     remote_repo:
@@ -42,4 +41,16 @@ runs:
 
       # Run build command
       ${BUILD_CMD}
+
+  - name: Warn in PR if build fails
+    if: failure()
+    uses: actions/github-script@v7
+    with:
+      script: |
+        github.issues.createComment({
+          issue_number: context.issue.number,
+          owner: context.repo.owner,
+          repo: context.repo.repo,
+          body: '⚠️ Downstream repo ${{ inputs.remote_repo }} failed to build. Check actions status for details.'
+        })
 
