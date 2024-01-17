@@ -1,0 +1,44 @@
+name: Build downstream cargo repo
+description: Build a cargo project that submodules the current repo
+
+
+inputs:
+    remote_repo:
+      description: The org/repository of the repository to check
+      required: true
+    submodule_path:
+      description: The path in the remote repo of the submodule we are going to try and up-rev
+      required: true
+    build_cmd:
+      description: The command to build the remote repo
+      required: false
+      default: cargo build --release
+
+runs:
+  using: composite
+  steps:
+  - uses: mobilecoinofficial/gh-actions/checkout@5ec4c64c949162b232d3e33d2649cb8416637d5e
+    with:
+      repository: ${{ inputs.remote_repo }}
+
+  - name: Build downstream repo with current branch
+    shell: bash
+    env:
+      SUBMODULE_PATH: ${{ inputs.submodule_path }}
+      BUILD_CMD: ${{ inputs.build_cmd }}
+    run: |
+      set -e
+      set -o pipefail
+
+      # Change to submodule path under remote repo
+      pushd "${SUBMODULE_PATH}"
+
+      # Update submodule to current git ref
+      git checkout "${GITHUB_REF}"
+
+      # Back out to remote repo base
+      popd
+
+      # Run build command
+      ${BUILD_CMD}
+
