@@ -20,7 +20,7 @@ inputs:
 runs:
   using: composite
   steps:
-  - uses: mobilecoinofficial/gh-actions/checkout@5ec4c64c949162b232d3e33d2649cb8416637d5e
+  - uses: mobilecoinofficial/gh-actions/checkout@v0
     with:
       repository: ${{ inputs.remote_repo }}
 
