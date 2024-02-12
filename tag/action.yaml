@@ -1,0 +1,28 @@
+name: Bump Tag
+description: Wrapper for anothrNick/github-tag-action
+
+inputs:
+  github_token:
+    description: Github token passed into setup to prevent api rate limiting
+    required: true
+  with_v:
+    description: prepend 'v' to tag version
+    default: 'true'
+  default_bump:
+    description: bump major, minor or patch by default
+    default: patch
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      token: ${{ inputs.github_token }}
+
+  - name: Bump GitHub tag
+    uses: anothrNick/github-tag-action@v1
+    env:
+      GITHUB_TOKEN: ${{ inputs.github_token }}
+      WITH_V: ${{ inputs.with_v }}
+      DEFAULT_BUMP: ${{ inputs.default_bump }}
