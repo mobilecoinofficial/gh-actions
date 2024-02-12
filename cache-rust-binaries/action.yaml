@@ -26,6 +26,10 @@ runs:
   - name: Install zstd if needed
     uses: mobilecoinofficial/gh-actions/install-zstd@v0
 
+  - name: Create cache directory
+    shell: bash
+    run: mkdir -p ${{ inputs.path }}
+
   - name: Cache rust build binaries
     id: rust_artifact_cache
     uses: actions/cache@v3

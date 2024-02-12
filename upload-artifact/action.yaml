@@ -1,0 +1,22 @@
+name: Upload Artifacts
+description: Wrapper for actions/upload-artifact
+
+inputs:
+  name:
+    description: Artifact name
+    required: true
+  path:
+    description: A file, directory or wildcard pattern that describes what to upload
+    required: true
+  retention-days:
+    description: Duration after which artifact will expire in days. 0 means using default retention.
+
+runs:
+  using: composite
+  steps:
+  - name: Upload binaries
+    uses: actions/upload-artifact@v4
+    with:
+      name: ${{ inputs.name }}
+      path: ${{ inputs.path }}
+      retention-days: ${{ inputs.retention-days }}
