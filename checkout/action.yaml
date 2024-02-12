@@ -39,4 +39,10 @@ runs:
       path: ${{ inputs.path }}
       ref: ${{ inputs.ref }}
       repository: ${{ inputs.repository }}
-      set-safe-directory: true
+      # set-safe-directory: true <- not sure what the point is since this doesn't persist beyond the "Checkout" step
+
+  - name: Set Git Safe Directory
+    shell: bash
+    run: |
+      git config --global --add safe.directory "$(pwd)"
+      git config --global -l --show-origin
