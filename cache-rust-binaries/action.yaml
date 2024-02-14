@@ -32,7 +32,7 @@ runs:
 
   - name: Cache rust build binaries
     id: rust_artifact_cache
-    uses: actions/cache@v3
+    uses: actions/cache@v4
     with:
       path: ${{ inputs.path }}
       # Key is a hash of all the .rs, .proto and Cargo.toml files.
