@@ -25,7 +25,7 @@ runs:
   steps:
   - name: Cache build binaries
     id: cache
-    uses: actions/cache@v3
+    uses: actions/cache@v4
     with:
       path: ${{ inputs.path }}
       # Key is a hash of all the .go, .p files.
