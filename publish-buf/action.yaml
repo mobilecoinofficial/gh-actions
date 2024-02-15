@@ -2,11 +2,11 @@ name: Publish to Buf
 description: Wrapper for publishing protos to buf.build
 
 inputs:
-  github_token:
-    description: Github token passed into setup to prevent api rate limiting
-    required: true
   buf_token:
     description: buf.build api token
+    required: true
+  path:
+    description: path to protos
     required: true
 
 runs:
@@ -16,14 +16,14 @@ runs:
     uses: mobilecoinofficial/gh-actions/checkout@v0
 
   - name: Buf Setup
-    uses: bufbuild/buf-setup-action@v1.21.0
+    uses: bufbuild/buf-setup-action@v1
     with:
-      github_token: ${{ inputs.github_token }}
+      github_token: ${{ github.token }}
 
   - name: Publish Protobufs to Buf
     uses: bufbuild/buf-push-action@v1
     with:
       # TODO: Reuse GH tag on buf when buf-push-action supports specifying
       # it: https://github.com/bufbuild/buf-push-action/issues/20
-      input: api/proto
+      input: ${{ inputs.path }}
       buf_token: ${{ inputs.buf_token }}
