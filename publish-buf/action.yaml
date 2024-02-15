@@ -17,6 +17,8 @@ runs:
 
   - name: Buf Setup
     uses: bufbuild/buf-setup-action@v1
+    with:
+      github_token: ${{ github.token }}
 
   - name: Publish Protobufs to Buf
     uses: bufbuild/buf-push-action@v1
