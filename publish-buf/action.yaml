@@ -5,9 +5,6 @@ inputs:
   buf_token:
     description: buf.build api token
     required: true
-  buf_user:
-    description: buf.build api user
-    required: true
   path:
     description: path to protos
     required: true
