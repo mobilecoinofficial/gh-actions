@@ -7,29 +7,28 @@ inputs:
 
 outputs:
   mrsigner:
-    value: ${{ steps.mrsigner.outputs.value }}
+    value: ${{ steps.measurement.outputs.mrsigner }}
     description: Hex value of MRSIGNER measurement
   mrenclave:
-    value: ${{ steps.mrenclave.outputs.value }}
+    value: ${{ steps.measurement.outputs.mrenclave }}
     description: Hex value of MRENCLAVE measurement
 
 runs:
   using: composite
   steps:
-  - name: Get MRSIGNER
-    id: mrsigner
+  - name: Get MRSIGNER/MRENCLAVE hash values
+    id: measurement
     shell: bash
     run: |
-      mrsigner=$(sgx_sign dump -enclave "${{ inputs.enclave_so_path }}" -dumpfile /dev/stdout 2>&1 | grep -A 2 -m 1 "mrsigner->value" | grep -v "mrsigner->value" | sed -r 's/(0x|\s+)//g' | tr -d "\n")
+      # Get MRSIGNER/MRENCLAVE values
+      dump=$(sgx_sign dump -enclave "${{ inputs.enclave_so_path }}" -dumpfile /dev/stdout 2>&1)
+      # Get MRSIGNER value from the enclave signed.so file
+      mrsigner=$(echo "${dump}" | grep -A 2 -m 1 "mrsigner->value" | grep -v "mrsigner->value" | sed -r 's/(0x|\s+)//g' | tr -d "\n")
 
-      echo "${mrsigner}"
-      echo "value=${mrsigner}" >> ${GITHUB_OUTPUT}
+      # Get MRENCLAVE value from the enclave signed.so file
+      mrenclave=$(echo "${dump}" | grep -A 2 -m 1 "enclave_hash.m" | grep -v "enclave_hash.m" | sed -r 's/(0x|\s+)//g' | tr -d "\n")
 
-  - name: Get MRENCLAVE
-    id: mrenclave
-    shell: bash
-    run: |
-      mrenclave=$(sgx_sign dump -enclave "${{ inputs.enclave_so_path }}" -dumpfile /dev/stdout | grep -A 2 -m 1 "enclave_hash.m" | grep -v "enclave_hash.m" | grep 0x | sed -r 's/(0x|\s+)//g' | tr -d "\n")
-
-      echo "${mrenclave}"
-      echo "value=${mrenclave}" >> ${GITHUB_OUTPUT}
+      echo "MRSIGNER: ${mrsigner}"
+      echo "MRENCLAVE: ${mrenclave}"
+      echo "mrsigner=${mrsigner}" >> ${GITHUB_OUTPUT}
+      echo "mrenclave=${mrenclave}" >> ${GITHUB_OUTPUT}
