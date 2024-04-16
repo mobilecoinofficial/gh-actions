@@ -10,6 +10,20 @@ inputs:
     required: true
   retention-days:
     description: Duration after which artifact will expire in days. 0 means using default retention.
+  if-no-files-found:
+    description: What to do if no files are found with the given path. Default is 'warn'.
+    default: warn
+    required: false
+  compression-level:
+    description: Compression level of the artifact. Default is '6'.
+    default: '6'
+    required: false
+  overwrite:
+    description: >
+      If true, an artifact with a matching name will be deleted before a new one is uploaded.
+      If false, the action will fail if an artifact for the given name already exists.
+      Does not fail if the artifact does not exist.
+    default: 'false'
 
 runs:
   using: composite
@@ -20,3 +34,6 @@ runs:
       name: ${{ inputs.name }}
       path: ${{ inputs.path }}
       retention-days: ${{ inputs.retention-days }}
+      if-no-files-found: ${{ inputs.if-no-files-found }}
+      compression-level: ${{ inputs.compression-level }}
+      overwrite: ${{ inputs.overwrite }}
