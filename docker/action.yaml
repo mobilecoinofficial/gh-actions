@@ -29,6 +29,10 @@ inputs:
   tags:
     description: New line separated list of tags for the docker image
     required: true
+  target:
+    description: Sets the target stage to build in Dockerfile
+    required: false
+    default: ""
   username:
     description: docker registry user
     default: ""
@@ -76,3 +80,4 @@ runs:
       labels: ${{ steps.docker_meta.outputs.labels }}
       push: ${{ inputs.push }}
       tags: ${{ steps.docker_meta.outputs.tags }}
+      target: ${{ inputs.target }}
