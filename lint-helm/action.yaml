@@ -10,6 +10,6 @@ runs:
       submodules: false
 
   - name: Lint Helm
-    uses: mobilecoinofficial/gha-k8s-toolbox@d7a8fa9873d05eb1f4874fbfe2ee3e85552bc36d
+    uses: mobilecoinofficial/gha-k8s-toolbox@b080a4e3a92ff791b27c15d09563b163d3582553
     with:
       action: helm-lint
