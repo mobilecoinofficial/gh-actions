@@ -1,0 +1,14 @@
+name: Lint Shell Scripts
+description: run shellcheck with reviewdog
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+
+  - name: Run shellcheck with reviewdog
+    uses: reviewdog/action-shellcheck@v1
+    with:
+      level: error
+      reporter: github-pr-review
