@@ -19,6 +19,14 @@ inputs:
     required: false
     default: |
       latest=true
+  platforms:
+    description: comma separated list of platforms to build for linux/amd64,linux/arm64
+    default: ""
+    required: false
+  emulation:
+    description: Use QEMU to emulate other platforms
+    default: "false"
+    required: false
   images:
     description: URL/Path to docker image registry
     required: true
@@ -61,6 +69,11 @@ runs:
       images: ${{ inputs.images }}
       tags: ${{ inputs.tags }}
 
+  # set up multi-arch support emulation
+  - name: Set up QEMU
+    if: inputs.emulation == 'true'
+    uses: docker/setup-qemu-action@v3
+
   - name: Set up Docker Buildx
     uses: docker/setup-buildx-action@v3
 
@@ -72,12 +85,13 @@ runs:
       password: ${{ inputs.password }}
 
   - name: Publish to DockerHub
-    uses: docker/build-push-action@v5
+    uses: docker/build-push-action@v6
     with:
       build-args: ${{ inputs.build_args }}
       context: ${{ inputs.context }}
       file: ${{ inputs.dockerfile }}
       labels: ${{ steps.docker_meta.outputs.labels }}
+      platforms: ${{ inputs.platforms }}
       push: ${{ inputs.push }}
       tags: ${{ steps.docker_meta.outputs.tags }}
       target: ${{ inputs.target }}
