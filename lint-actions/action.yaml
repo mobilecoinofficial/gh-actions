@@ -1,0 +1,14 @@
+name: Lint GitHub Actions
+description: run actionlint with reviewdog
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+
+  - name: Run actionlint with reviewdog
+    uses: reviewdog/action-actionlint@v1
+    with:
+      level: error
+      reporter: github-pr-review

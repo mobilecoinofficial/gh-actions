@@ -1,0 +1,15 @@
+name: Lint Helm
+description: run helm lint
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      submodules: false
+
+  - name: Lint Helm
+    uses: mobilecoinofficial/gha-k8s-toolbox@v1
+    with:
+      action: helm-lint

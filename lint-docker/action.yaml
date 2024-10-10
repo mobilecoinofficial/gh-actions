@@ -1,0 +1,22 @@
+name: Lint Docker
+description: Lint dockerfiles with hadolint and reviewdog
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+
+  - name: Install wget
+    shell: bash
+    run: |
+      sudo apt-get update
+      sudo apt-get install -y wget
+
+  - name: Run hadolint with reviewdog
+    uses: reviewdog/action-hadolint@v1
+    with:
+      level: error
+      reporter: github-pr-review
+      exclude: |
+        *.dockerignore
