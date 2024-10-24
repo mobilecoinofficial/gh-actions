@@ -86,6 +86,10 @@ runs:
 
   - name: Publish to DockerHub
     uses: docker/build-push-action@v6
+    env:
+      DOCKER_BUILD_CHECKS_ANNOTATIONS: "false"
+      DOCKER_BUILD_SUMMARY: "false"
+      DOCKER_BUILD_RECORD_UPLOAD: "false"
     with:
       build-args: ${{ inputs.build_args }}
       context: ${{ inputs.context }}
