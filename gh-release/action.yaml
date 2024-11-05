@@ -56,6 +56,7 @@ runs:
       body_path: ${{ inputs.body_path }}
       name: ${{ inputs.name }}
       tag_name: ${{ inputs.tag_name }}
+      draft: ${{ inputs.draft }}
       prerelease: ${{ inputs.prerelease }}
       files: ${{ inputs.files }}
       fail_on_unmatched_files: ${{ inputs.fail_on_unmatched_files }}
