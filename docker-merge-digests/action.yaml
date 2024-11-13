@@ -1,11 +1,7 @@
-name: Mobilecoin Docker
-description: Standardized docker build and publish actions
+name: Docker Merge Digest
+description: This action takes a list of docker image digests and merges them into a manifest that we can tag and push to a registry. This is useful for creating a manifest list for multi-arch images. Digests are stored as an empty file attached as artifacts to the build by previous steps.
 
 inputs:
-  digest_artifact_prefix:
-    description: Prefix for the artifact names to restore
-    required: false
-    default: ""
   flavor:
     description: New line separated list of docker meta flavor options
     required: false
@@ -35,11 +31,17 @@ outputs:
 runs:
   using: composite
   steps:
+  - name: Parse Image Name
+    shell: bash
+    run: |
+      IMAGE_NAME=${{ inputs.images }}
+      echo "IMAGE_NAME=${IMAGE_NAME#*/}" >> "${GITHUB_ENV}"
+
   - name: Download digests
     uses: mobilecoinofficial/gh-actions/download-artifact@v0
     with:
       path: /tmp/digests
-      pattern: ${{ inputs.digest_artifact_prefix }}*
+      pattern: digests-${{ env.IMAGE_NAME }}*
       merge-multiple: true
 
   - name: Set up Docker Buildx
