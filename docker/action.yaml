@@ -67,7 +67,7 @@ outputs:
     value: ${{ inputs.push }}
   digest:
     description: docker image digest
-    value: ${{ steps.docker_build.outputs.digest }}
+    value: ${{ steps.build.outputs.digest }}
 
 runs:
   using: composite
@@ -96,7 +96,7 @@ runs:
       password: ${{ inputs.password }}
 
   - name: Publish to DockerHub
-    id: docker_build
+    id: build
     uses: docker/build-push-action@v6
     env:
       DOCKER_BUILD_CHECKS_ANNOTATIONS: "false"
