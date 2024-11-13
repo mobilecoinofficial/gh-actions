@@ -57,7 +57,7 @@ inputs:
 outputs:
   tags:
     description: docker/meta-action tags
-    value: ${{ steps.docker_meta.output.tags }}
+    value: ${{ steps.docker_meta.outputs.tags }}
   pushed:
     description: was the docker image published to the registry
     value: ${{ inputs.push }}
