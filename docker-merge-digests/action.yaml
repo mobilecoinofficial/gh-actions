@@ -1,0 +1,73 @@
+name: Docker Merge Digest
+description: This action takes a list of docker image digests and merges them into a manifest that we can tag and push to a registry. This is useful for creating a manifest list for multi-arch images. Digests are stored as an empty file attached as artifacts to the build by previous steps.
+
+inputs:
+  flavor:
+    description: New line separated list of docker meta flavor options
+    required: false
+    default: "latest=false"
+  images:
+    description: URL/Path to docker image registry
+    default: ""
+    required: false
+  tags:
+    description: New line separated list of tags for the docker image
+    required: false
+    default: ""
+  username:
+    description: docker registry user
+    default: ""
+    required: false
+  password:
+    description: docker registry password
+    default: ""
+    required: false
+
+outputs:
+  tags:
+    description: docker/meta-action tags
+    value: ${{ steps.docker_meta.output.tags }}
+
+runs:
+  using: composite
+  steps:
+  - name: Parse Image Name
+    shell: bash
+    run: |
+      IMAGE_NAME=${{ inputs.images }}
+      echo "IMAGE_NAME=${IMAGE_NAME#*/}" >> "${GITHUB_ENV}"
+
+  - name: Download digests
+    uses: mobilecoinofficial/gh-actions/download-artifact@v0
+    with:
+      path: /tmp/digests
+      pattern: digests-${{ env.IMAGE_NAME }}*
+      merge-multiple: true
+
+  - name: Set up Docker Buildx
+    uses: docker/setup-buildx-action@v3
+
+  - name: Generate Docker Tags
+    id: docker_meta
+    uses: docker/metadata-action@v5
+    with:
+      flavor: ${{ inputs.flavor }}
+      images: ${{ inputs.images }}
+      tags: ${{ inputs.tags }}
+
+  - name: Login to DockerHub
+    if: inputs.username && inputs.password
+    uses: docker/login-action@v3
+    with:
+      username: ${{ inputs.username }}
+      password: ${{ inputs.password }}
+
+  - name: Create manifest list and push
+    shell: bash
+    working-directory: /tmp/digests
+    run: |
+      # Grab the tags from metadata-action ENV with jq
+      # Gather all the digests for the images pushed (names of empty files stored as artifacts)
+      # Push a manifest (tag) with all the digests to dockerhub
+      docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+        $(printf '${{ inputs.images }}@sha256:%s ' *)

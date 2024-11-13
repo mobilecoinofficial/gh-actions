@@ -1,0 +1,16 @@
+name: Short SHA
+description: Just spit out the short SHA (7) of the commit.
+
+outputs:
+  short_sha:
+    description: Short SHA (7) of the commit
+    value: ${{ steps.short_sha.outputs.sha }}
+
+runs:
+  using: composite
+  steps:
+  - name: Get short SHA
+    shell: bash
+    id: short_sha
+    run: |
+        echo "sha=sha-${GITHUB_SHA::7}" >> "${GITHUB_OUTPUT}"

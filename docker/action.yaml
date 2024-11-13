@@ -17,8 +17,7 @@ inputs:
   flavor:
     description: New line separated list of docker meta flavor options
     required: false
-    default: |
-      latest=true
+    default: "latest=false"
   platforms:
     description: comma separated list of platforms to build for linux/amd64,linux/arm64
     default: ""
@@ -36,7 +35,8 @@ inputs:
     required: false
   tags:
     description: New line separated list of tags for the docker image
-    required: true
+    required: false
+    default: ""
   target:
     description: Sets the target stage to build in Dockerfile
     required: false
@@ -49,14 +49,25 @@ inputs:
     description: docker registry password
     default: ""
     required: false
+  outputs:
+    description: override the image output methods https://docs.docker.com/build/exporters/
+    required: false
+    default: ""
+  save_digest:
+    description: save the docker image digest to an artifact
+    required: false
+    default: "false"
 
 outputs:
   tags:
     description: docker/meta-action tags
-    value: ${{ steps.docker_meta.tags }}
+    value: ${{ steps.docker_meta.outputs.tags }}
   pushed:
     description: was the docker image published to the registry
     value: ${{ inputs.push }}
+  digest:
+    description: docker image digest
+    value: ${{ steps.build.outputs.digest }}
 
 runs:
   using: composite
@@ -85,6 +96,7 @@ runs:
       password: ${{ inputs.password }}
 
   - name: Publish to DockerHub
+    id: build
     uses: docker/build-push-action@v6
     env:
       DOCKER_BUILD_CHECKS_ANNOTATIONS: "false"
@@ -97,5 +109,30 @@ runs:
       labels: ${{ steps.docker_meta.outputs.labels }}
       platforms: ${{ inputs.platforms }}
       push: ${{ inputs.push }}
-      tags: ${{ steps.docker_meta.outputs.tags }}
+      tags: ${{ inputs.outputs == '' && steps.docker_meta.outputs.tags || '' }}
       target: ${{ inputs.target }}
+      outputs: ${{ inputs.outputs }}
+
+  - name: Parse Image Name
+    if: inputs.save_digest == 'true'
+    shell: bash
+    run: |
+      IMAGE_NAME=${{ inputs.images }}
+      echo "IMAGE_NAME=${IMAGE_NAME#*/}" >> "${GITHUB_ENV}"
+
+  - name: Export Digest
+    if: inputs.save_digest == 'true'
+    shell: bash
+    run: |
+      mkdir -p /tmp/digests
+      digest="${{ steps.build.outputs.digest }}"
+      touch "/tmp/digests/${digest#sha256:}"
+
+  - name: Upload Digests
+    if: inputs.save_digest == 'true'
+    uses: mobilecoinofficial/gh-actions/upload-artifact@v0
+    with:
+      name: digests-${{ env.IMAGE_NAME }}-${{ runner.arch }}
+      path: /tmp/digests/*
+      if-no-files-found: error
+      retention-days: 1
