@@ -22,6 +22,10 @@ inputs:
     description: docker registry password
     default: ""
     required: false
+  digest_artifact_prefix:
+    description: prefix for the digest artifact
+    required: false
+    default: "digests"
 
 outputs:
   tags:
@@ -41,7 +45,7 @@ runs:
     uses: mobilecoinofficial/gh-actions/download-artifact@v0
     with:
       path: /tmp/digests
-      pattern: digests-${{ env.IMAGE_NAME }}*
+      pattern: ${{ inputs.digest_artifact_prefix }}-${{ env.IMAGE_NAME }}*
       merge-multiple: true
 
   - name: Set up Docker Buildx

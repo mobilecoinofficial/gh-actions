@@ -57,6 +57,10 @@ inputs:
     description: save the docker image digest to an artifact
     required: false
     default: "false"
+  digest_artifact_prefix:
+    description: prefix for the digest artifact
+    required: false
+    default: "digests"
 
 outputs:
   tags:
@@ -132,7 +136,7 @@ runs:
     if: inputs.save_digest == 'true'
     uses: mobilecoinofficial/gh-actions/upload-artifact@v0
     with:
-      name: digests-${{ env.IMAGE_NAME }}-${{ runner.arch }}
+      name: ${{ inputs.digest_artifact_prefix }}-${{ env.IMAGE_NAME }}-${{ runner.arch }}
       path: /tmp/digests/*
       if-no-files-found: error
       retention-days: 1
