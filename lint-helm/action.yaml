@@ -1,13 +1,19 @@
 name: Lint Helm
 description: run helm lint
 
+inputs:
+  submodules:
+    description: true. false or recursive
+    required: false
+    default: 'false'
+
 runs:
   using: composite
   steps:
   - name: Checkout
     uses: mobilecoinofficial/gh-actions/checkout@v0
     with:
-      submodules: false
+      submodules: ${{ inputs.submodules }}
 
   - name: Lint Helm
     uses: mobilecoinofficial/gha-k8s-toolbox@v1
