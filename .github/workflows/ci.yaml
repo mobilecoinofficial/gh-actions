@@ -14,7 +14,7 @@ permissions:
 
 jobs:
   lint-shell:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -26,7 +26,7 @@ jobs:
         reporter: github-pr-review
 
   lint-actions:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: Checkout
       uses: actions/checkout@v3
@@ -43,7 +43,7 @@ jobs:
     needs:
     - lint-shell
     - lint-actions
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
     steps:
     - name: All Checks OK!
       run: |
