@@ -16,12 +16,12 @@ runs:
     uses: mobilecoinofficial/gh-actions/checkout@v0
 
   - name: Buf Setup
-    uses: bufbuild/buf-setup-action@v1
+    uses: bufbuild/buf-setup-action@a47c93e0b1648d5651a065437926377d060baa99 # v1.50.0
     with:
       github_token: ${{ github.token }}
 
   - name: Publish Protobufs to Buf
-    uses: bufbuild/buf-push-action@v1
+    uses: bufbuild/buf-push-action@a654ff18effe4641ebea4a4ce242c49800728459 # v1.2.0
     with:
       # TODO: Reuse GH tag on buf when buf-push-action supports specifying
       # it: https://github.com/bufbuild/buf-push-action/issues/20

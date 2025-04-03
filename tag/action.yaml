@@ -21,7 +21,7 @@ runs:
       token: ${{ inputs.github_token }}
 
   - name: Bump GitHub tag
-    uses: anothrNick/github-tag-action@v1
+    uses: anothrNick/github-tag-action@f278d49d30cdd8775cc3e7dd00b5ee11686ee297 # v1.71.0
     env:
       GITHUB_TOKEN: ${{ inputs.github_token }}
       WITH_V: ${{ inputs.with_v }}
