@@ -1,0 +1,22 @@
+name: Lint YAML
+description: run yamllint with reviewdog
+
+inputs:
+  submodules:
+    description: true. false or recursive
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      submodules: ${{ inputs.submodules }}
+
+  - name: Run yamllint with reviewdog
+    uses: reviewdog/action-yamllint@v1
+    with:
+      level: error
+      reporter: github-pr-review
