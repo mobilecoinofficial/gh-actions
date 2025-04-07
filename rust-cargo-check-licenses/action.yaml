@@ -1,0 +1,20 @@
+name: Check Rust Licenses
+description: Set up github problem matchers for Rust
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      submodules: 'false'
+  - name: Check license and source bans - advisories
+    continue-on-error: true
+    uses: EmbarkStudios/cargo-deny-action@34899fc7ba81ca6268d5947a7a16b4649013fea1 # v2.0.11
+    with:
+      command: check advisories
+  - name: Check license and source bans - bans licenses sources
+    uses: EmbarkStudios/cargo-deny-action@34899fc7ba81ca6268d5947a7a16b4649013fea1 # v2.0.11
+    with:
+      command: check bans licenses sources
+
