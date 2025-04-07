@@ -1,5 +1,5 @@
 name: Check Rust Licenses
-description: Set up github problem matchers for Rust
+description: Check Rust licenses and source bans
 
 runs:
   using: composite

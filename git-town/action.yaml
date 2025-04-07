@@ -1,9 +1,5 @@
 name: Run git-town
 description: |
-  Run git-town commands.
-
-  Run with mobilecoin/rust-base image.
-
   Requires contents:read and pull-requests:write permissions.
 
 inputs:
