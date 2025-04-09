@@ -1,0 +1,20 @@
+name: Run git-town
+description: |
+  Requires contents:read and pull-requests:write permissions.
+
+inputs:
+  main-branch:
+    description: The main branch to use for git-town commands
+    default: main
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      submodules: 'false'
+  - name: Run git-town
+    uses: git-town/action@db5a46a8e5fa44f2f69c07ecc3e1e2580ca9ba56 # v1.2.0
+    with:
+      main-branch: ${{ inputs.main-branch }}
