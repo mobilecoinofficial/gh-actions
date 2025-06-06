@@ -15,6 +15,6 @@ runs:
     with:
       submodules: 'false'
   - name: Run git-town
-    uses: git-town/action@db5a46a8e5fa44f2f69c07ecc3e1e2580ca9ba56 # v1.2.0
+    uses: git-town/action@3d8b878379abb1ee393fb49865a28b4a6c2cd3b0 # v1.2.1
     with:
       main-branch: ${{ inputs.main-branch }}
