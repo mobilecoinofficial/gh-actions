@@ -14,12 +14,15 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Checkout
-    uses: mobilecoinofficial/gh-actions/checkout@v0
-    with:
-      submodules: false
-
-  - name: run cargo audit
-    uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2.0.0
-    with:
-      token: ${{ inputs.github_token }}
+    - name: Checkout
+      uses: mobilecoinofficial/gh-actions/checkout@v0
+      with:
+        submodules: false
+    - name: Install stable cargo-audit
+      run: |
+        rustup toolchain install stable
+        cargo +stable install cargo-audit
+    - name: run cargo audit
+      uses: rustsec/audit-check@69366f33c96575abad1ee0dba8212993eecbe998 # v2.0.0
+      with:
+        token: ${{ inputs.github_token }}
