@@ -19,6 +19,7 @@ runs:
       with:
         submodules: false
     - name: Install stable cargo-audit
+      shell: bash
       run: |
         rustup toolchain install stable
         cargo +stable install cargo-audit
