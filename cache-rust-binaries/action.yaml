@@ -37,4 +37,4 @@ runs:
       path: ${{ inputs.path }}
       # Key is a hash of all the .rs, .proto and Cargo.toml files.
       # if code changes, invalidate cache and rebuild
-      key: ${{ inputs.cache_buster }}${{ inputs.additional_keys }}-${{ runner.os }}-${{ hashFiles('**/*.rs', '**/*.proto', '**/Cargo.toml', '**/*.edl', '.cargo/config', '!target/**') }}-rust-build-artifacts
+      key: ${{ inputs.cache_buster }}${{ inputs.additional_keys }}-${{ runner.os }}-${{ hashFiles('**/*.rs', '**/*.proto', '**/Cargo.toml', '**/*.edl', '.cargo/config') }}-rust-build-artifacts
