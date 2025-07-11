@@ -1,0 +1,210 @@
+name: JUnit Report
+description: Wrapper for mikepenz/action-junit-report
+
+inputs:
+  token:
+    description: 'Specify the token to use to publish the check.'
+    required: false
+    default: ${{ github.token }}
+  github_token:
+    description: 'Deprecated syntax to specify github token.'
+    required: false
+  report_paths:
+    description: 'Xml report paths in glob format'
+    required: false
+    default: '**/junit-reports/TEST-*.xml'
+  group_reports:
+    description: 'Defines if reports are grouped into a combined test result. This '
+    required: false
+    default: 'true'
+  test_files_prefix:
+    description: 'Prefix to add to test file paths from report files when annotating'
+    required: false
+    default: ''
+  exclude_sources:
+    description: 'Comma seperated list of source folders to ignore for lookup'
+    required: false
+  annotate_only:
+    description: 'Enable to only annotate the results on the files, will not create a check run.'
+    required: false
+    default: 'false'
+  check_annotations:
+    description: 'Defines if the checks will include annotations (This is different than `annotate_only`).'
+    required: false
+    default: 'true'
+  update_check:
+    description: 'Defines if the active check should be updated instead'
+    required: false
+    default: 'false'
+  check_name:
+    description: 'Check name for test reports.'
+    required: false
+    default: 'JUnit Test Report'
+  commit:
+    description: 'Commit SHA to update the check status.'
+    required: false
+  fail_on_failure:
+    description: 'Fail the build in case a test failure occurred.'
+    required: false
+    default: 'false'
+  fail_on_parse_error:
+    description: 'Fail the build if the test report file can not be parsed.'
+    required: false
+    default: 'false'
+  require_tests:
+    description: 'Fail if no test are found.'
+    required: false
+    default: 'false'
+  require_passed_tests:
+    description: 'Fail if no passed test are found.'
+    required: false
+    default: 'false'
+  include_passed:
+    description: 'Include passed tests in the report'
+    required: false
+    default: 'false'
+  check_title_template:
+    description: |-
+      Template to configure the title format. Placeholders: {{FILE_NAME}}, {{SUITE_NAME}}, {{TEST_NAME}}, {{CLASS_NAME}}, {{BREAD_CRUMB}}.
+    required: false
+  bread_crumb_delimiter:
+    description: |-
+      Defines the delimiter characters between the breadcrumb elements. Defaults to: `/`.
+    required: false
+    default: '/'
+  summary:
+    description: 'Additional text to summary output'
+    required: false
+    default: ''
+  check_retries:
+    description: 'If a testcase is retried, ignore the original failure.'
+    required: false
+    default: 'false'
+  transformers:
+    description: 'Provide a regex pattern and target pattern'
+    required: false
+    default: '[]'
+  job_summary:
+    description: 'Enables the publishing of a JOB_SUMMARY with the report.'
+    required: false
+    default: 'true'
+  detailed_summary:
+    description: 'Include table with all test results in summary'
+    required: false
+    default: 'false'
+  flaky_summary:
+    description: 'Include table with all flaky results in summary'
+    required: false
+    default: 'false'
+  verbose_summary:
+    description: 'Include note of missing test annotations in summary.'
+    required: false
+    default: 'true'
+  skip_success_summary:
+    description: 'Skips summaries that would not contain failed tests'
+    required: false
+    default: 'false'
+  include_empty_in_summary:
+    description: 'Include entries in summaries that have 0 count'
+    required: false
+    default: 'true'
+  include_time_in_summary:
+    description: 'Include time in summaries'
+    required: false
+    default: 'false'
+  simplified_summary:
+    description: 'Use icons instead of text to indicate status in summary'
+    required: false
+    default: 'false'
+  group_suite:
+    description: 'If enabled, will group the testcases by test suite in the `detailed_summary`'
+    required: false
+    default: 'false'
+  comment:
+    description: 'Enables a comment being added to the PR with the summary tables (summary has to be enabled). Default: false'
+    required: false
+    default: 'false'
+  updateComment:
+    description: 'Enables updating the prior comment if one already exists. Default: true'
+    required: false
+    default: 'true'
+  annotate_notice:
+    description: 'Annotate passed tests along with warning and failed ones'
+    required: false
+    default: 'false'
+  follow_symlink:
+    description: 'Enables the file globber to follow symlinks. Default: false'
+    required: false
+    default: 'false'
+  job_name:
+    description: 'Specify the name of a check to update'
+    required: false
+    default: ${{ github.job }}
+  annotations_limit:
+    description: 'Specify the limit for annotations. This will also interrupt parsing all test-suites if the limit is reached.'
+    required: false
+  skip_annotations:
+    description: 'Setting this flag will result in no annotations being added to the run.'
+    required: false
+  truncate_stack_traces:
+    description: 'Truncate stack traces from test output to 2 lines in annotations'
+    required: false
+    default: 'true'
+  resolve_ignore_classname:
+    description: 'Force ignore test case classname from the xml report (This can help fix issues with some tools/languages)'
+    required: false
+    default: 'false'
+  skip_comment_without_tests:
+    description: 'Disable commenting if no tests are detected'
+    required: false
+    default: 'false'
+  pr_id:
+    description: 'PR number to comment on (useful for workflow_run contexts)'
+    required: false
+
+runs:
+  using: composite
+  steps:
+  - uses: mikepenz/action-junit-report@3585e9575db828022551b4231f165eb59a0e74e3 # v5.6.2
+    with:
+      token: ${{ inputs.token }}
+      github_token: ${{ inputs.github_token }}
+      report_paths: ${{ inputs.report_paths }}
+      group_reports: ${{ inputs.group_reports }}
+      test_files_prefix: ${{ inputs.test_files_prefix }}
+      exclude_sources: ${{ inputs.exclude_sources }}
+      annotate_only: ${{ inputs.annotate_only }}
+      check_annotations: ${{ inputs.check_annotations }}
+      update_check: ${{ inputs.update_check }}
+      check_name: ${{ inputs.check_name }}
+      commit: ${{ inputs.commit }}
+      fail_on_failure: ${{ inputs.fail_on_failure }}
+      fail_on_parse_error: ${{ inputs.fail_on_parse_error }}
+      require_tests: ${{ inputs.require_tests }}
+      require_passed_tests: ${{ inputs.require_passed_tests }}
+      include_passed: ${{ inputs.include_passed }}
+      check_title_template: ${{ inputs.check_title_template }}
+      bread_crumb_delimiter: ${{ inputs.bread_crumb_delimiter }}
+      summary: ${{ inputs.summary }}
+      check_retries: ${{ inputs.check_retries }}
+      transformers: ${{ inputs.transformers }}
+      job_summary: ${{ inputs.job_summary }}
+      detailed_summary: ${{ inputs.detailed_summary }}
+      flaky_summary: ${{ inputs.flaky_summary }}
+      verbose_summary: ${{ inputs.verbose_summary }}
+      skip_success_summary: ${{ inputs.skip_success_summary }}
+      include_empty_in_summary: ${{ inputs.include_empty_in_summary }}
+      include_time_in_summary: ${{ inputs.include_time_in_summary }}
+      simplified_summary: ${{ inputs.simplified_summary }}
+      group_suite: ${{ inputs.group_suite }}
+      comment: ${{ inputs.comment }}
+      updateComment: ${{ inputs.updateComment }}
+      annotate_notice: ${{ inputs.annotate_notice }}
+      follow_symlink: ${{ inputs.follow_symlink }}
+      job_name: ${{ inputs.job_name }}
+      annotations_limit: ${{ inputs.annotations_limit }}
+      skip_annotations: ${{ inputs.skip_annotations }}
+      truncate_stack_traces: ${{ inputs.truncate_stack_traces }}
+      resolve_ignore_classname: ${{ inputs.resolve_ignore_classname }}
+      skip_comment_without_tests: ${{ inputs.skip_comment_without_tests }}
+      pr_id: ${{ inputs.pr_id }}
