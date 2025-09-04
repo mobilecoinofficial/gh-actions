@@ -2,6 +2,10 @@ name: Terraform Format Action
 description: Wrapper for dflook/terraform-fmt
 
 inputs:
+  github_token:
+    description: Github token passed
+    required: false
+    default: ""
   path:
     description: The path containing Terraform files to format.
     required: false
