@@ -31,8 +31,6 @@ runs:
   steps:
   - name: Checkout
     uses: mobilecoinofficial/gh-actions/checkout@v0
-    with:
-      token: ${{ inputs.github_token }}
 
   - name: Terraform fmt
     uses: dflook/terraform-fmt@1964140828a3cd334f311122e09f9e824060382e # v2.2.2
