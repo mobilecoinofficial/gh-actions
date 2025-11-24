@@ -27,6 +27,7 @@ jobs:
         WITH_V: 'true'
         DEFAULT_BUMP: patch
         DRY_RUN: 'true'
+        GIT_API_TAGGING: false # uses git cli
 
     # Doing manual tags because anothrNick/github-tag-action won't retag a commit.
     - name: Get major and minor values for new tag
