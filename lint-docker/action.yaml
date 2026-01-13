@@ -22,7 +22,7 @@ runs:
       sudo apt-get install -y wget
 
   - name: Run hadolint with reviewdog
-    uses: reviewdog/action-hadolint@fc7ee4a9f71e521bc43e370819247b70e5327540 # v1.50.2
+    uses: reviewdog/action-hadolint@921946a7ebaaf08ac72607bad67209f4e52b5407 # v1.50.5
     with:
       level: error
       reporter: github-pr-review
