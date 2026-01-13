@@ -33,7 +33,7 @@ runs:
     uses: mobilecoinofficial/gh-actions/checkout@v0
 
   - name: Terraform fmt
-    uses: dflook/terraform-fmt@1964140828a3cd334f311122e09f9e824060382e # v2.2.2
+    uses: dflook/terraform-fmt@90fc9225b4c109d9a6bb0b2ca0faa89490c0ba95 # v2.2.3
     with:
       path: ${{ inputs.path }}
       workspace: ${{ inputs.workspace }}
