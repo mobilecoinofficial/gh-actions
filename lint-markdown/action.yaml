@@ -1,0 +1,43 @@
+name: Lint Markdown
+description: run Markdownlint on your markdown files
+
+inputs:
+  config:
+    description: Path of a file to use for the base configuration object (defaults to none)
+    default: ''
+    required: false
+  fix:
+    description: Whether to fix supported issues automatically (any truthy value enables)
+    default: ''
+    required: false
+  globs:
+    description: Glob expression(s) of files to lint (newline-delimited)
+    default: '*.{md,markdown}'
+    required: false
+  separator:
+    description: String to use as a separator for the "globs" input (defaults to newline)
+    default: "\n"
+    required: false
+  submodules:
+    description: true. false or recursive
+    required: false
+    default: 'false'
+
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: mobilecoinofficial/gh-actions/checkout@v0
+    with:
+      submodules: ${{ inputs.submodules }}
+
+  - name: Setup markdownlint problem matcher
+    uses: xt0rted/markdownlint-problem-matcher@1a5fabfb577370cfdf5af944d418e4be3ea06f27 # v3.0.0
+
+  - name: Lint Markdown
+    uses: DavidAnson/markdownlint-cli2-action@07035fd053f7be764496c0f8d8f9f41f98305101 # v22.0.0
+    with:
+      config: ${{ inputs.config }}
+      fix: ${{ inputs.fix }}
+      globs: ${{ inputs.globs }}
+      separator: ${{ inputs.separator }}
