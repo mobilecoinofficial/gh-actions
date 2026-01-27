@@ -26,5 +26,5 @@ runs:
       GITHUB_TOKEN: ${{ inputs.github_token }}
       WITH_V: ${{ inputs.with_v }}
       DEFAULT_BUMP: ${{ inputs.default_bump }}
-      GIT_API_TAGGING: false # uses git cli
-      VERBOSE: true
+      GIT_API_TAGGING: 'false' # uses git cli
+      VERBOSE: 'true'
