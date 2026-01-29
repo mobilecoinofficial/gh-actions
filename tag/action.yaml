@@ -19,6 +19,7 @@ runs:
     uses: mobilecoinofficial/gh-actions/checkout@v0
     with:
       token: ${{ inputs.github_token }}
+      submodules: false
 
   - name: Bump GitHub tag
     uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8 # 1.75.0
@@ -26,5 +27,4 @@ runs:
       GITHUB_TOKEN: ${{ inputs.github_token }}
       WITH_V: ${{ inputs.with_v }}
       DEFAULT_BUMP: ${{ inputs.default_bump }}
-      GIT_API_TAGGING: false # uses git cli
-      VERBOSE: true
+      GIT_API_TAGGING: 'false' # uses git cli
