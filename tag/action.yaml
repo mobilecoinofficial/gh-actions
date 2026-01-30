@@ -34,7 +34,7 @@ runs:
   - name: Major Only Tagging
     if: ${{ inputs.major_only == 'true' }}
     id: compute_tag
-    uses: craig-day/compute-tag@v18
+    uses: craig-day/compute-tag@30dd1c7ac3ef9a58278f133e2dcd105acb51a9b3 # v18
     with:
       github_token: ${{ inputs.github_token }}
       version_scheme: continuous

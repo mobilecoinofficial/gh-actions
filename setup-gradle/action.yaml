@@ -234,5 +234,6 @@ runs:
       gradle-plugin-repository-password: ${{ inputs.gradle-plugin-repository-password }}
       validate-wrappers: ${{ inputs.validate-wrappers }}
       allow-snapshot-wrappers: ${{ inputs.allow-snapshot-wrappers }}
+      gradle-home-cache-strict-match: ${{ inputs.gradle-home-cache-strict-match }}
       workflow-job-context: ${{ inputs.workflow-job-context }}
       github-token: ${{ inputs.github-token }}
