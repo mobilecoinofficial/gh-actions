@@ -8,9 +8,19 @@ inputs:
   with_v:
     description: prepend 'v' to tag version
     default: 'true'
+    required: false
   default_bump:
     description: bump major, minor or patch by default
     default: patch
+    required: false
+  major_only:
+    description: use only major versioning (v1, v2, v3, etc)
+    required: false
+    default: 'false'
+  custom_tag:
+    description: use a custom tag instead of bumping
+    default: ''
+    required: false
 
 runs:
   using: composite
@@ -21,6 +31,15 @@ runs:
       token: ${{ inputs.github_token }}
       submodules: false
 
+  - name: Major Only Tagging
+    if: ${{ inputs.major_only == 'true' }}
+    id: compute_tag
+    uses: craig-day/compute-tag@f45e4c2d6cab8ef1a0eb512bc165f46e65f45e1d # v19
+    with:
+      github_token: ${{ inputs.github_token }}
+      version_scheme: continuous
+      version_type: major
+
   - name: Bump GitHub tag
     uses: anothrNick/github-tag-action@4ed44965e0db8dab2b466a16da04aec3cc312fd8 # 1.75.0
     env:
@@ -28,3 +47,5 @@ runs:
       WITH_V: ${{ inputs.with_v }}
       DEFAULT_BUMP: ${{ inputs.default_bump }}
       GIT_API_TAGGING: 'false' # uses git cli
+      # set major_only tag or use custom tag
+      CUSTOM_TAG: ${{ inputs.major_only && steps.compute_tag.outputs.next_tag || inputs.custom_tag }}

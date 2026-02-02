@@ -1,0 +1,48 @@
+name: Coverage Report (kover-report)
+description: Wrapper for mi-kas/kover-report
+
+inputs:
+  path:
+    required: true
+    description: 'Path to the generated kover report xml file'
+  token:
+    required: false
+    description: 'Github personal token to add commits to the pull request'
+    default: ${{ github.token }}
+  title:
+    required: false
+    description: 'Title for the pull request comment'
+  update-comment:
+    required: false
+    default: 'false'
+    description: 'Update the coverage report comment instead of creating a new one. Requires title to be set.'
+  min-coverage-overall:
+    required: false
+    description: 'The minimum code coverage that is required to pass for overall project'
+  min-coverage-changed-files:
+    required: false
+    description: 'The minimum code coverage that is required to pass for changed files'
+  coverage-counter-type:
+    required: false
+    description: 'Report counter type (`INSTRUCTION``, `LINE` or `BRANCH`) to calculate coverage metrics.'
+
+outputs:
+  coverage-overall:
+    description: 'The overall coverage of the project'
+    value: ${{ steps.coverage.outputs.coverage-overall }}
+  coverage-changed-files:
+    description: 'The total coverage of all changed files'
+    value: ${{ steps.coverage.outputs.coverage-changed-files }}
+
+runs:
+  using: composite
+  steps:
+  - uses: mi-kas/kover-report@5f58465b6f395c8fa3adc2665e27250bad87de50 # v1.9
+    with:
+      path: ${{ inputs.path }}
+      token: ${{ inputs.token }}
+      title: ${{ inputs.title }}
+      update-comment: ${{ inputs.update-comment }}
+      min-coverage-overall: ${{ inputs.min-coverage-overall }}
+      min-coverage-changed-files: ${{ inputs.min-coverage-changed-files }}
+      coverage-counter-type: ${{ inputs.coverage-counter-type }}
