@@ -8,7 +8,7 @@ inputs:
     required: false
   fix:
     description: Whether to fix supported issues automatically (any truthy value enables)
-    default: ''
+    default: 'false'
     required: false
   globs:
     description: Glob expression(s) of files to lint (newline-delimited)
