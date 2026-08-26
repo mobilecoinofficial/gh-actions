@@ -1,0 +1,31 @@
+name: Upload License Year
+description: |
+  Wrapper for FantasticFiasco/action-update-license-year
+  requires contents: write and pull-requests: write permissions to work properly
+
+inputs:
+  github_token:
+    description: GitHub token
+    default: ${{ github.token }}
+  path:
+    description: Path to files to update
+    default: |
+      **/*.rs
+      **/*.proto
+  labels:
+    description: Labels to add to the PR
+    default: "copyright"
+  transform:
+    description: Regex to match the year in the copyright line
+    default: (?<=^\/\/ Copyright \(c\) )(?<from>\d{4})?-?(\d{4})?
+
+runs:
+  using: composite
+  steps:
+  - uses: mobilecoinofficial/gh-actions/checkout@v0
+  - uses: FantasticFiasco/action-update-license-year@v2
+    with:
+      token: ${{ inputs.github_token }}
+      path: ${{ inputs.path }}
+      labels: ${{ inputs.labels }}
+      transform: ${{ inputs.transform }}
