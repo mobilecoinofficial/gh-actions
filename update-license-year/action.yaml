@@ -23,7 +23,7 @@ runs:
   using: composite
   steps:
   - uses: mobilecoinofficial/gh-actions/checkout@v0
-  - uses: FantasticFiasco/action-update-license-year@v2
+  - uses: FantasticFiasco/action-update-license-year@f180e962fa988db222d8f03ef4636750312d1b3d # v3.0.8
     with:
       token: ${{ inputs.github_token }}
       path: ${{ inputs.path }}
