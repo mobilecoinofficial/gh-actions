@@ -31,9 +31,6 @@ runs:
     with:
       submodules: ${{ inputs.submodules }}
 
-  - name: Setup markdownlint problem matcher
-    uses: xt0rted/markdownlint-problem-matcher@1a5fabfb577370cfdf5af944d418e4be3ea06f27 # v3.0.0
-
   - name: Lint Markdown
     uses: DavidAnson/markdownlint-cli2-action@21c1be1b93ad9ed58fa840aacc3f279cde2a72ff # v24.2.0
     with:
