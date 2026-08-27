@@ -1,0 +1,22 @@
+name: Github Issue Labeler
+description: wrap github/issue-labeler to label issues and pull requests based on their content
+
+inputs:
+  github-token:
+    description: GitHub token to use for authentication
+    required: true
+  configuration-path:
+    description: Path to the configuration file for the labeler
+    default: .github/triage-labeler.yaml
+  enable-versioned-regex:
+    description: Enable versioned regex support (0 or 1)
+    default: '0'
+
+runs:
+  using: composite
+  steps:
+  - uses: github/issue-labeler@c1b0f9f52a63158c4adc09425e858e87b32e9685 # v3.4
+    with:
+      repo-token: "${{ inputs.github-token }}"
+      configuration-path: "${{ inputs.configuration-path }}"
+      enable-versioned-regex: "${{ inputs.enable-versioned-regex }}"
