@@ -37,7 +37,7 @@ outputs:
 runs:
   using: composite
   steps:
-  - uses: mi-kas/kover-report@fe40bd3712cf57dd19bfb0c16ccb0472a0478dae # v2.6
+  - uses: mi-kas/kover-report@94d69bc9d417de89b808cd5fe846bca2840911bb # v2.7
     with:
       path: ${{ inputs.path }}
       token: ${{ inputs.token }}
