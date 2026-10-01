@@ -18,3 +18,4 @@ runs:
     uses: git-town/action@670e1f4feb81fdef4226fc09deefe09018eb20d1 # v1.3.3
     with:
       main-branch: ${{ inputs.main-branch }}
+      skip-single-stacks: true
