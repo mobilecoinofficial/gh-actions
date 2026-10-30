@@ -16,7 +16,7 @@ runs:
       submodules: ${{ inputs.submodules }}
 
   - name: Run actionlint with reviewdog
-    uses: reviewdog/action-actionlint@8bacd0b6ac20de8f143bda009d7c86f263c06bd1 # v1.80.5
+    uses: reviewdog/action-actionlint@619a81ec64ff8c0211cd6146eb2b21e8f1d7f440 # v1.81.1
     with:
       level: error
       reporter: github-pr-review
