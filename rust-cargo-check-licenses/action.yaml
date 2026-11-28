@@ -11,11 +11,11 @@ runs:
   - name: Advisories
     id: advisories
     continue-on-error: true
-    uses: EmbarkStudios/cargo-deny-action@81891abc19297b21343b15ef67dc61e4aea74fda # v2.1.4
+    uses: EmbarkStudios/cargo-deny-action@bb119f768ea239e765aeaef5769558d4f21213aa # v2.1.5
     with:
       command: check advisories
   - name: License and Source Bans
-    uses: EmbarkStudios/cargo-deny-action@81891abc19297b21343b15ef67dc61e4aea74fda # v2.1.4
+    uses: EmbarkStudios/cargo-deny-action@bb119f768ea239e765aeaef5769558d4f21213aa # v2.1.5
     with:
       command: check bans licenses sources
   - name: Report Advisories Failure Status
